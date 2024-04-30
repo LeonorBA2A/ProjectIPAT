@@ -1,11 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sheesh</title>
-</head>
-<body>
-    <h1>House</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>NAME</th>
+                    <th>EMAIL</th>
+                    <th>PHONE</th>
+                    <th>ADDRESS</th>
+                    <th>CITY</th>
+                    <th>STATE</th>
+                    <th>ZIPCODE</th>
+                    <th>CREATED AT</th>
+                    <th>ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if records %}
+                    {% for record in records %}
+                        <tr>
+                            <td>{{ record.first_name }} {{ record.last_name }}</td>
+                            <td>{{ record.email }}</td>
+                            <td>{{ record.phone}}</td>
+                            <td>{{ record.address}}</td>
+                            <td>{{ record.city}}</td>
+                            <td>{{ record.state}}</td>
+                            <td>{{ record.zipcode}}</td>
+                            <td>{{ record.created_at}}</td>
+                            <td>{{ record.id}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <div class="container col-md-6 offset-md-3">
+            <div class="row">
+                <label for="">
+                    <h3>LOGIN</h3>
+                </label> <br>
+                <form action="{% url 'home' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb3"> <br>
+                        <input type="text" class="form-control" placeholder="username" name="username">
+                    </div>
+                    <div class="mb3"> <br>
+                        <input type="password" class="form-control" placeholder="password" name="password">
+                    </div>
+                    <div class="mb3"> <br>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary btn-block" type="submit">Login</button> <br>
+                        </div> <br>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+    <div class="container col-md-6 offset-md-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %} 
+    </div>
+
+{% endblock content %}
